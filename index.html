@@ -53,7 +53,7 @@
     <script type="module" src="js/nebula-system.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>my hg🌏</title>
+    <title>To Addie🌏</title>
     <link rel="icon" type="image/x-icon" href="https://anitamyworld-gamma.vercel.app/assets/images/planet.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -308,6 +308,93 @@
             cursor: pointer;
             z-index: 10001;
         }
+
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            color: white;
+        }
+        .music-player:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            background: rgba(30, 30, 30, 0.85);
+        }
+        .music-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .music-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(255, 107, 107, 0.4);
+            animation: pulse-music 2s infinite ease-in-out;
+        }
+        .music-icon.paused {
+            animation: none;
+        }
+        @keyframes pulse-music {
+            0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+        }
+        .music-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+        }
+        .music-title {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+        .music-artist {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        .player-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .player-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+        .player-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 
     <script src="js/exif.js"></script>
@@ -443,6 +530,21 @@
     <!-- <button id="letter-btn" class="letter-btn" title="Hiệu ứng thư tình">
         <img src="https://anitamyworld-gamma.vercel.app/assets/images/letter.gif" alt="Letter" style="width: 28px; height: 28px; vertical-align: middle;">
     </button> -->
+
+    <!-- Music Player -->
+    <div id="musicPlayer" class="music-player">
+        <div class="music-info">
+            <div class="music-icon paused" id="musicIcon"><i class="fas fa-music"></i></div>
+            <div class="music-text">
+                <div class="music-title">Angel</div>
+                <div class="music-artist">Playing now...</div>
+            </div>
+        </div>
+        <button id="floatingPlayBtn" class="player-btn" title="Play/Pause Music">
+            <i class="fas fa-play" id="floatingPlayIcon"></i>
+        </button>
+    </div>
+
     <script>
         // QUESTION PANEL SCRIPT
         const panel = document.getElementById("questionPanel");
@@ -453,6 +555,8 @@
             e.stopPropagation();
             panel.classList.add('panel-fade-out');
             setTimeout(() => { panel.style.display = "none"; }, 350);
+            if (window.audioManager) window.audioManager.playOnly();
+            if (window.cameraController) window.cameraController.triggerAnimation();
         });
 
         // --- Interactive No Button ---
@@ -644,6 +748,33 @@
         // Khởi tạo AudioManager duy nhất
         if (!window.audioManager) {
             window.audioManager = new AudioManager();
+        }
+
+        // Play button logic
+        const floatingPlayBtn = document.getElementById('floatingPlayBtn');
+        const floatingPlayIcon = document.getElementById('floatingPlayIcon');
+        
+        if (floatingPlayBtn && window.audioManager) {
+            floatingPlayBtn.addEventListener('click', () => {
+                if (window.audioManager.isPlaying) {
+                    window.audioManager.audio.pause();
+                } else {
+                    window.audioManager.playOnly();
+                }
+            });
+            
+            // Sync icon with audio state
+            const musicIcon = document.getElementById('musicIcon');
+            window.audioManager.audio.addEventListener('play', () => {
+                floatingPlayIcon.classList.remove('fa-play');
+                floatingPlayIcon.classList.add('fa-pause');
+                if (musicIcon) musicIcon.classList.remove('paused');
+            });
+            window.audioManager.audio.addEventListener('pause', () => {
+                floatingPlayIcon.classList.remove('fa-pause');
+                floatingPlayIcon.classList.add('fa-play');
+                if (musicIcon) musicIcon.classList.add('paused');
+            });
         }
 
         // Initialize systems

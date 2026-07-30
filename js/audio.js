@@ -4,7 +4,7 @@ export class AudioManager {
     constructor() {
         this.audio = document.getElementById('bg-audio');
         // music default
-        this.defaultAudioUrl = 'https://anitamyworld-gamma.vercel.app/assets/musics/sombadypleasure.mp3';
+        this.defaultAudioUrl = 'Angel.mp3';
         this.currentAudioUrl = null;
         this.isPlaying = false;
         this.isAudioLoaded = false;
@@ -21,20 +21,10 @@ export class AudioManager {
         
         // === AUDIO LIST ===
         this.audioList = [
-            'https://anitamyworld-gamma.vercel.app/assets/musics/massageinabottle.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/oldlove.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/perfect.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/herewithme.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/givemeyourforever.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/wannabeyours.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/stuckwithyou.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/untilifoundyou.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/sombadypleasure.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/dandelions.mp3',
-            'https://anitamyworld-gamma.vercel.app/assets/musics/gluesong.mp3'
+            'Angel.mp3'
         ];
         
-        this.currentAudioIndex = 9; // Index của hukhong.mp3 (default)
+        this.currentAudioIndex = 0; // Index của Angel.mp3 (default)
         
         this.setAudioUrl(this.defaultAudioUrl);
         this.setupAudioEvents();
@@ -313,16 +303,19 @@ export class AudioManager {
         try {
             // Chỉ phát nhạc nếu đang tạm dừng
             if (this.audio.paused) {
-                // Đảm bảo audio context được resume (cần thiết cho mobile)
-                if (this.audio.readyState >= 2) { // HAVE_CURRENT_DATA
-                    await this.audio.play();
-                    this.isPlaying = true;
-                } else {
-                    // Đợi audio load xong
-                    this.audio.addEventListener('canplay', async () => {
-                        await this.audio.play();
+                if (this.audio.currentTime < 1) {
+                    this.audio.currentTime = 170; // 2:50
+                }
+                // Call play() directly so it is triggered by user interaction synchronously
+                const playPromise = this.audio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
                         this.isPlaying = true;
-                    }, { once: true });
+                    }).catch(error => {
+                        console.error('🎵 Error playing audio:', error);
+                    });
+                } else {
+                    this.isPlaying = true;
                 }
             } else {
                 console.log('🎵 Audio is already playing, no action needed');

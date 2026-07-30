@@ -356,14 +356,18 @@ export class FlowerRingSystem {
         this.scene.add(this.flowerRing);
 
         const mediaFiles = [
-            { type: 'image', url: 'img1.jpeg' },
-            { type: 'image', url: 'img2.jpeg' },
-            { type: 'image', url: 'img3.jpeg' },
-            { type: 'image', url: 'img4.jpeg' },
-            { type: 'image', url: 'img5.jpeg' },
-            { type: 'video', url: 'vid1.mp4' },
-            { type: 'video', url: 'vid2.mp4' },
-            { type: 'video', url: 'vid3.mp4' }
+            { type: 'image', url: 'iCloud%20Photos/2026_07_30_15_25_53_IMG_5675.JPG' },
+            { type: 'image', url: 'iCloud%20Photos/2026_07_30_15_25_55_IMG_5676.JPG' },
+            { type: 'image', url: 'iCloud%20Photos/IMG_5639.JPG' },
+            { type: 'image', url: 'iCloud%20Photos/IMG_5640.JPG' },
+            { type: 'image', url: 'iCloud%20Photos/IMG_5641.JPG' },
+            { type: 'image', url: 'iCloud%20Photos/IMG_5642.JPG' },
+            { type: 'image', url: 'iCloud%20Photos/IMG_5643.JPG' },
+            { type: 'video', url: 'iCloud%20Photos/2026_07_27_18_20_31_IMG_5680.MOV' },
+            { type: 'video', url: 'iCloud%20Photos/2026_07_28_09_29_15_IMG_5679.MOV' },
+            { type: 'video', url: 'iCloud%20Photos/2026_07_30_14_48_44_IMG_5678.MOV' },
+            { type: 'video', url: 'iCloud%20Photos/2026_07_30_14_48_49_IMG_5677.MOV' },
+            { type: 'video', url: 'iCloud%20Photos/2026_07_30_14_54_39_IMG_5674.MOV' }
         ];
 
         this.disposeTextures();

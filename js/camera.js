@@ -71,8 +71,20 @@ export class CameraController {
                                     this.camera.lookAt(0, 0, 0);
                                 },
                                 onComplete: () => {
-                                    this.isAnimating = false;
-                                    this.controls.enabled = true;
+                                    gsap.to(this.camera.position, {
+                                        x: 0,
+                                        y: 60,
+                                        z: 200,
+                                        duration: 5,
+                                        ease: 'power2.inOut',
+                                        onUpdate: () => {
+                                            this.camera.lookAt(0, 0, 0);
+                                        },
+                                        onComplete: () => {
+                                            this.isAnimating = false;
+                                            this.controls.enabled = true;
+                                        }
+                                    });
                                 }
                             });
                         }
